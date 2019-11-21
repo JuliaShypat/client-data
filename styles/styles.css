@@ -1,0 +1,15 @@
+body {
+  color: blue;
+}
+
+p {
+  font-size: 19px;
+}
+
+.wrong {
+  color: red;
+}
+
+.success {
+  color: green;
+}
