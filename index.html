@@ -13,31 +13,66 @@
     />
   </head>
   <body>
-    <div class="container">
-      <nav class="navbar navbar-light bg-light">
+    <section class="container">
+      <nav class="navbar navbar-light bg-light sticky-top">
         <a class="navbar-brand">Clients list</a>
         <form class="form-inline">
           <input
+            id="filterInput"
             class="form-control mr-sm-2"
             type="Start"
             placeholder="Search"
             aria-label="Search"
+            onkeyup="filterList()"
           />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="button">
+          <!-- <button
+            class="btn btn-outline-success my-2 my-sm-0"
+            type="button"
+            onclick="filterList()"
+          >
             Filter
-          </button>
+          </button> -->
           <div class="btn-group mx-2" role="group" aria-label="First group">
-            <button type="button" class="btn btn-secondary">A-Z</button>
-            <button type="button" class="btn btn-secondary">Z-A</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="sortList('ascending')"
+            >
+              A-Z
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="sortList('descending')"
+            >
+              Z-A
+            </button>
           </div>
         </form>
+        <a>$<span class="totalAmountContainer">00.00</span></a>
       </nav>
+    </section>
+    <section class="container resultList">
       <div class="row">
         <div class="col-12">
-          <ul çlass="list-unstyled" id="clientsData"></ul>
+          <ul class="list-unstyled" id="clientsData"></ul>
         </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <h3>Total: $<span class="totalAmountContainer">00.00</span></h3>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="container notFound">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="display-2">Sorry, nothing was found!</h1>
+        </div>
+      </div>
+    </section>
   </body>
   <script>
     (function() {
