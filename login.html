@@ -12,11 +12,8 @@
   </head>
   <body>
     <section class="container">
-      <a href="https://profrontend.pro" class="profrontendLink"
-        >Go to ProFrontend!</a
-      >
       <form method="GET" name="registerForm">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="name">Name</label><br />
           <input
             class="form-control"
@@ -24,7 +21,7 @@
             value="Yuliia Shypat"
             name="fullName"
           />
-        </div>
+        </div> -->
         <div class="form-group">
           <label for="email">Email</label><br />
           <input
@@ -41,6 +38,29 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>
+
+        <!-- <button type="submit">Click me too!</button> -->
+      </form>
+    </section>
+
+    <section class="container">
+      <form method="GET" name="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label><br />
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value="julia@qwerty.com"
+          />
+        </div>
+        <div class="form-group">
+          <label for="pass">Password</label><br />
+          <input class="form-control" type="password" name="pass" /><br />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
 
         <!-- <button type="submit">Click me too!</button> -->
       </form>
@@ -64,6 +84,14 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"
   ></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
 
-  <script type="text/javascript" src="scripts/test.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script type="text/javascript" src="scripts/firebase.js"></script>
+  <script type="text/javascript" src="scripts/login.js"></script>
 </html>
