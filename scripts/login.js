@@ -1,3 +1,5 @@
+let state = "login";
+
 const registerForm = document.querySelector("[name='registerForm']");
 
 registerForm.addEventListener("submit", event => {
@@ -11,7 +13,7 @@ loginForm.addEventListener("submit", event => {
   event.preventDefault();
   validateLoginForm(event.target);
 });
-
+togleStatus(state);
 //Observe changes
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
@@ -35,27 +37,76 @@ firebase.auth().onAuthStateChanged(user => {
 registerForm
   .querySelector("[type='password']")
   .addEventListener("blur", event => {
-    console.log(event.target);
     validatePassword(event.target);
   });
 
+loginForm.querySelector("[type='password']").addEventListener("blur", event => {
+  validatePassword(event.target);
+});
+
+registerForm.querySelector("[name='email']").addEventListener("blur", event => {
+  validateEmail(event.target);
+});
+
+loginForm.querySelector("[name='email']").addEventListener("blur", event => {
+  validateEmail(event.target);
+});
+
+function showLogin() {
+  loginForm.style.display = "block";
+  registerForm.style.display = "none";
+}
+
+function showRegister() {
+  registerForm.style.display = "block";
+  loginForm.style.display = "none";
+}
+
+function togleStatus(newState) {
+  state = newState;
+  state === "login" ? showLogin() : showRegister();
+}
+
 function validateRegisterForm(target) {
-  validatePassword(target.pass);
-  registerNewUser(target.email.value, target.pass.value);
+  const isFormValid = validateRequiredFields(target);
+  isFormValid ? registerNewUser(target.email.value, target.pass.value) : null;
 }
 
 function validateLoginForm(target) {
-  // validatePassword(target.pass);
-  logIn(target.email.value, target.pass.value);
+  const isFormValid = validateRequiredFields(target);
+  isFormValid ? logIn(target.email.value, target.pass.value) : null;
+}
+
+function validateRequiredFields(target) {
+  const isPasswordValid = validatePassword(target.pass);
+  const isEmailValid = validateEmail(target.email);
+  return isPasswordValid && isEmailValid;
 }
 
 function validatePassword(field) {
-  if (field.value.length < 10) {
-    field.className += " is-invalid";
-    console.warn("Your pass is too weak!");
-  } else {
-    field.className = "form-control is-valid";
+  if (field.value) {
+    markFieldAsValid(field);
+    return true;
   }
+  markFieldAsInvalid(field);
+  return false;
+}
+
+function markFieldAsInvalid(field) {
+  field.className += " is-invalid";
+}
+
+function markFieldAsValid(field) {
+  field.className = "form-control is-valid";
+}
+
+function validateEmail(field) {
+  if (field.value && validator.isEmail(field.value)) {
+    markFieldAsValid(field);
+    return true;
+  }
+  markFieldAsInvalid(field);
+  return false;
 }
 
 function registerNewUser(email, password) {
@@ -75,5 +126,8 @@ function logIn(email, password) {
 }
 
 function handleError(error) {
-  alert(`Error! ${error.code} - ${error.message}`);
+  const alert = document.querySelector(".alert");
+  const message = alert.querySelector(".error-message");
+  message.innerHTML = error.message;
+  alert.className = "alert alert-danger fade show m-4";
 }
