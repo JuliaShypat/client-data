@@ -25,6 +25,12 @@ newClientForm.addEventListener("submit", event => {
   addClient(event.target);
 });
 
+const editClientForm = document.querySelector("#editClientForm");
+editClientForm.addEventListener("submit", event => {
+  event.preventDefault();
+  editClient(event.target); // TODO: Add Client form
+});
+
 function displayData(clientsList = clients) {
   clearList();
   const ul = document.querySelector("#clientsData");
@@ -64,17 +70,30 @@ function createClientDescription(client, id) {
   const deleteLink = document.createElement("a");
   deleteLink.innerHTML = "Delete";
   deleteLink.setAttribute("href", "#");
+  deleteLink.classList.add("mx-2");
   deleteLink.addEventListener("click", event => {
     event.preventDefault();
     deleteClient(id);
   });
+  const editLink = createEditLink();
 
   div.appendChild(textPart1);
   div.appendChild(mailLink);
   div.appendChild(textPart2);
+  div.appendChild(editLink);
   div.appendChild(deleteLink);
 
   return div;
+}
+
+function createEditLink() {
+  const editLink = document.createElement("a");
+  editLink.innerHTML = "Edit";
+  editLink.setAttribute("href", "#");
+  editLink.setAttribute("data-toggle", "modal");
+  editLink.setAttribute("data-target", "#editClientModel");
+  editLink.classList.add("mx-2");
+  return editLink;
 }
 
 function deleteClient(id) {
