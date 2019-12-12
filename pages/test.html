@@ -1,9 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>I am test page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
   </head>
   <body>
-    <h1>Test page</h1>
+    <script>
+      function makeBurger(ingredients) {
+        const burgerPromise = new Promise((resolve, reject) => {
+          const timeForBurger = 500 + ingredients.length * 300;
+          setTimeout(() => {
+            // When ready use resolve()
+
+            resolve(`Burger ready: ${ingredients.join(", ")}`);
+          }, timeForBurger);
+
+          // If error use reject()
+        });
+        return burgerPromise;
+      }
+
+      // const beefBurgerPromise = makeBurger(["bun", "tomato", "beef"]);
+      // const chickenBurgerPromise = makeBurger(["bun", "salad", "chicken"]);
+      // console.log(beefBurgerPromise);
+      // console.log(chickenBurgerPromise);
+
+      makeBurger(["bun", "tomato", "beef", "sos", "onion"])
+        .then(burger => {
+          console.log("Burger delivery");
+          console.log(burger);
+          return makeBurger(["bun"]);
+        })
+        .then(burger => {
+          console.log("Burger delivery");
+          console.log(burger);
+          return makeBurger([
+            "bun",
+            "salad",
+            "chicken",
+            "bun",
+            "salad",
+            "chicken",
+            "bun",
+            "salad",
+            "chicken"
+          ]);
+        })
+        .then(burger => {
+          console.log("This is last burger");
+          console.log(burger);
+        });
+
+      // Concurently
+      const beefBurgerPromise = makeBurger(["bun", "tomato", "beef"]);
+      const chickenBurgerPromise = makeBurger(["bun", "salad", "chicken"]);
+      const cheeseBurgerPromise = makeBurger(["cheese"]);
+
+      const deliveryPromise = Promise.all([
+        beefBurgerPromise,
+        chickenBurgerPromise,
+        cheeseBurgerPromise
+      ]);
+
+      deliveryPromise.then(([hamBurger, chickenBurger, cheeseBurger]) => {
+        console.log(hamBurger);
+        console.log(chickenBurger);
+        console.log(cheeseBurger);
+      });
+
+      const firstBurgerPromise = Promise.race([
+        beefBurgerPromise,
+        chickenBurgerPromise,
+        cheeseBurgerPromise
+      ]);
+
+      firstBurgerPromise.then(burger => {
+        console.log("I am first", burger);
+      });
+    </script>
   </body>
 </html>
