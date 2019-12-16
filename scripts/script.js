@@ -32,24 +32,26 @@ editClientForm.addEventListener("submit", event => {
 });
 
 function displayData(clientsList = clients) {
+  console.log(clientsList);
   clearList();
   const ul = document.querySelector("#clientsData");
-  for (const property in clientsList) {
-    ul.appendChild(getLiElement(clientsList[property], property));
-  }
+  clientsList.forEach(client => {
+    ul.appendChild(getLiElement(client));
+  });
   sumAmount(clientsList);
 }
 
-function getLiElement(client, id) {
+function getLiElement(client) {
+  const { avatar, clientId } = client;
   const newLi = document.createElement("li");
-  const avatar = document.createElement("img");
+  const image = document.createElement("img");
   newLi.className = "media";
-  newLi.id = id;
-  avatar.className = "mr-3 align-self-center";
-  avatar.setAttribute("src", client.avatar);
+  newLi.id = clientId;
+  image.className = "mr-3 align-self-center";
+  image.setAttribute("src", avatar);
 
-  newLi.appendChild(avatar);
-  newLi.appendChild(createClientDescription(client, id));
+  newLi.appendChild(image);
+  newLi.appendChild(createClientDescription(client, clientId));
   return newLi;
 }
 
