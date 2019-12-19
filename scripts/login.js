@@ -1,4 +1,15 @@
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
+
+import { initApp } from "./firebase";
+import * as validator from "validator";
+const firebase = require("firebase/app");
+require("firebase/auth");
+
 let state = "login";
+
+// Init App
+initApp();
 
 const registerForm = document.querySelector("[name='registerForm']");
 
@@ -17,19 +28,8 @@ togleStatus(state);
 //Observe changes
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    // User is signed in.
-    // let displayName = user.displayName;
     let email = user.email;
-    window.location.href =
-      "file:///C:/Users/yulii/proFrontend/client-data/index.html";
-    // let emailVerified = user.emailVerified;
-    // let photoURL = user.photoURL;
-    // let isAnonymous = user.isAnonymous;
-    // let uid = user.uid;
-    // let providerData = user.providerData;
-  } else {
-    // User is signed out.
-    // ...
+    window.location.href = "./index.html";
   }
 });
 
@@ -118,6 +118,7 @@ function registerNewUser(email, password) {
 }
 
 function logIn(email, password) {
+  console.log(email, password);
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)

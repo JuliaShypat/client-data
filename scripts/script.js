@@ -1,20 +1,17 @@
-//Observe changes
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
+const firebase = require("firebase/app");
+require("firebase/auth");
+require("firebase/database");
+import { initApp } from "./firebase";
+import { getData, clients } from "./data";
+import { refreshData, showResultListSection, showNotFoundSection } from "./dom";
+
+initApp();
+getData();
 firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    // User is signed in.
-    // let displayName = user.displayName;
-    let email = user.email;
-    // alert("Hello " + email);
-    // let emailVerified = user.emailVerified;
-    // let photoURL = user.photoURL;
-    // let isAnonymous = user.isAnonymous;
-    // let uid = user.uid;
-    // let providerData = user.providerData;
-  } else {
-    window.location.href =
-      "file:///C:/Users/yulii/proFrontend/client-data/login.html";
-    // User is signed out.
-    // ...
+  if (!user) {
+    window.location.href = "./login.html";
   }
 });
 
@@ -28,92 +25,28 @@ newClientForm.addEventListener("submit", event => {
 const editClientForm = document.querySelector("#editClientForm");
 editClientForm.addEventListener("submit", event => {
   event.preventDefault();
-  editClient(event.target); // TODO: Add Client form
+  editClient(event.target);
 });
 
-function displayData(clientsList = clients) {
-  console.log(clientsList);
-  clearList();
-  const ul = document.querySelector("#clientsData");
-  clientsList.forEach(client => {
-    ul.appendChild(getLiElement(client));
-  });
-  sumAmount(clientsList);
-}
+const logOutBtn = document.querySelector("#logOut");
+logOutBtn.addEventListener("click", () => {
+  logOut();
+});
 
-function getLiElement(client) {
-  const { avatar, clientId } = client;
-  const newLi = document.createElement("li");
-  const image = document.createElement("img");
-  newLi.className = "media";
-  newLi.id = clientId;
-  image.className = "mr-3 align-self-center";
-  image.setAttribute("src", avatar);
+const filterField = document.querySelector("#filterInput");
+filterField.addEventListener("keyup", event => {
+  filterList(event);
+});
 
-  newLi.appendChild(image);
-  newLi.appendChild(createClientDescription(client, clientId));
-  return newLi;
-}
+const sortAZ = document.querySelector("#sortAscending");
+sortAZ.addEventListener("click", () => {
+  sortList("ascending");
+});
 
-function createClientDescription(client, id) {
-  const div = document.createElement("div");
-  div.className = "media-body";
-
-  const mailLink = document.createElement("a");
-  mailLink.setAttribute("href", `mailto:${client.email}`);
-  mailLink.innerHTML = client.email;
-  const textPart1 = document.createTextNode(
-    `${client.lastName} ${client.firstName} - `
-  );
-  const textPart2 = document.createTextNode(
-    ` ${client.gender} (${client.date} - ${client.amount})`
-  );
-
-  const deleteLink = document.createElement("a");
-  deleteLink.innerHTML = "Delete";
-  deleteLink.setAttribute("href", "#");
-  deleteLink.classList.add("mx-2");
-  deleteLink.addEventListener("click", event => {
-    event.preventDefault();
-    deleteClient(id);
-  });
-  const editLink = createEditLink(id);
-
-  div.appendChild(textPart1);
-  div.appendChild(mailLink);
-  div.appendChild(textPart2);
-  div.appendChild(editLink);
-  div.appendChild(deleteLink);
-
-  return div;
-}
-
-function createEditLink(id) {
-  const editLink = document.createElement("a");
-  editLink.innerHTML = "Edit";
-  editLink.setAttribute("href", "#");
-  editLink.setAttribute("data-toggle", "modal");
-  editLink.setAttribute("data-target", "#editClientModel");
-  editLink.setAttribute("data-client-id", id);
-  editLink.classList.add("mx-2");
-  editLink.classList.add("edit-client-link");
-  editLink.addEventListener("click", () => {
-    fillClientForm(id);
-  });
-  return editLink;
-}
-
-function fillClientForm(id) {
-  if (editClientForm) {
-    editClientForm.firstName.value = clients[id].firstName;
-    editClientForm.lastName.value = clients[id].lastName;
-    editClientForm.email.value = clients[id].email;
-    editClientForm.gender.value = clients[id].gender;
-    editClientForm.amount.value = clients[id].amount;
-    editClientForm.date.value = clients[id].date;
-    editClientForm.clientID.value = id;
-  }
-}
+const sortZA = document.querySelector("#sortDescending");
+sortZA.addEventListener("click", () => {
+  sortList("descending");
+});
 
 function editClient(form) {
   const data = {
@@ -134,11 +67,6 @@ function editClient(form) {
   if (id) updateDB(updates);
 }
 
-function deleteClient(id) {
-  const clientRef = database.ref(`clients/${id}`);
-  clientRef.remove();
-}
-
 function sortList(order) {
   const sortedClients = clients.sort((lastClient, nextClient) => {
     if (order == "ascending") {
@@ -150,23 +78,8 @@ function sortList(order) {
   refreshData(sortedClients);
 }
 
-function refreshData(updatedClients) {
-  clearList();
-  displayData(updatedClients);
-}
-
-function clearList() {
-  const ul = document.querySelector("#clientsData");
-  while (ul.firstChild) {
-    ul.removeChild(ul.firstChild);
-  }
-}
-
-function filterList() {
-  const filterString = document
-    .querySelector("#filterInput")
-    .value.toLowerCase()
-    .trim();
+function filterList(event) {
+  const filterString = event.target.value.toLowerCase().trim();
   if (filterString) {
     const filteredClients = clients.filter(client => {
       return (
@@ -185,7 +98,7 @@ function filterList() {
   }
 }
 
-function sumAmount(clientsList = clients) {
+export function sumAmount(clientsList = clients) {
   const total = clientsList.reduce((amount, client) => {
     return amount + removeCurrencyFromAmount(client.amount);
   }, 0);
@@ -196,16 +109,6 @@ function sumAmount(clientsList = clients) {
 
 function removeCurrencyFromAmount(amount) {
   return amount ? Number(amount.slice(1)) : 0;
-}
-
-function showNotFoundSection() {
-  document.querySelector(".resultList").style.display = "none";
-  document.querySelector(".notFound").style.display = "block";
-}
-
-function showResultListSection() {
-  document.querySelector(".resultList").style.display = "block";
-  document.querySelector(".notFound").style.display = "none";
 }
 
 function addClient(form) {
@@ -219,7 +122,8 @@ function addClient(form) {
     avatar: form.photo.value
   };
 
-  const newId = database
+  const newId = firebase
+    .database()
     .ref()
     .child("clients")
     .push().key;
@@ -231,15 +135,18 @@ function addClient(form) {
 }
 
 function updateDB(updates) {
-  database.ref().update(updates, function(error) {
-    if (error) {
-      console.error(
-        "New client was not added or was not saved! Error occured!"
-      );
-    } else {
-      console.log("Data added/saved to database!");
-    }
-  });
+  firebase
+    .database()
+    .ref()
+    .update(updates, function(error) {
+      if (error) {
+        console.error(
+          "New client was not added or was not saved! Error occured!"
+        );
+      } else {
+        console.log("Data added/saved to database!");
+      }
+    });
 }
 
 function logOut() {
@@ -248,8 +155,7 @@ function logOut() {
     .signOut()
     .then(() => {
       // Sign-out successful.
-      window.location.href =
-        "file:///C:/Users/yulii/proFrontend/client-data/login.html";
+      window.location.href = "./login.html";
     })
     .catch(error => {
       console.error(error);
