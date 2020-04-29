@@ -1,11 +1,14 @@
 {
   "name": "client-data",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
   "version": "1.0.0",
   "description": "Client data is simple CRM for managing clients",
   "main": "data.js",
   "scripts": {
-    "start": "parcel index.html login.html",
-    "build": "parcel build index.html login.html"
+    "start": "parcel index.html login.html test.html",
+    "build": "parcel build index.html login.html test.html"
   },
   "repository": {
     "type": "git",

@@ -51,6 +51,7 @@ const logOutBtn = document.querySelector("#logOut");
 logOutBtn.addEventListener("click", () => {
   logOut();
 });
+
 function editClient(form) {
   const data = {
     firstName: form.firstName.value,
@@ -166,13 +167,15 @@ export function sumAmount(clientsList = clients) {
 }
 
 export function fillClientForm(id) {
+  const currentClient = clients.find(client => client.clientId == id);
+
   if (editClientForm) {
-    editClientForm.firstName.value = clients[id].firstName;
-    editClientForm.lastName.value = clients[id].lastName;
-    editClientForm.email.value = clients[id].email;
-    editClientForm.gender.value = clients[id].gender;
-    editClientForm.amount.value = clients[id].amount;
-    editClientForm.date.value = clients[id].date;
+    editClientForm.firstName.value = currentClient.firstName;
+    editClientForm.lastName.value = currentClient.lastName;
+    editClientForm.email.value = currentClient.email;
+    editClientForm.gender.value = currentClient.gender;
+    editClientForm.amount.value = currentClient.amount;
+    editClientForm.date.value = currentClient.date;
     editClientForm.clientID.value = id;
   }
 }

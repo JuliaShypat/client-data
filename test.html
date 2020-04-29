@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello!</h1>
+    <script>
+      // async function makeBurger(ingredients) {
+      //   const burgerPromise = await new Promise((resolve, reject) => {
+      //     if (ingredients.includes('fish')) {
+      //       // If error use reject()
+      //       reject('We dont have any fish!!!');
+      //     }
+      //     const timeForBurger = 500 + ingredients.length * 300;
+      //     setTimeout(() => {
+      //       // When ready use resolve()
+      //       resolve(`Burger ready: ${ingredients.join(', ')}`);
+      //     }, timeForBurger);
+      //   });
+      //   return burgerPromise;
+      // }
+
+      // async function getBurgersOnebyOne() {
+      //   const burger = await makeBurger([
+      //     'bun',
+      //     'tomato',
+      //     'beef',
+      //     'sos',
+      //     'onion',
+      //   ]);
+      //   console.log(burger);
+      //   const burger2 = await makeBurger(['bun']);
+      //   console.log(burger);
+      //   const burger3 = await makeBurger([
+      //     'bun',
+      //     'salad',
+      //     'chicken',
+      //     'bun',
+      //     'salad',
+      //     'chicken',
+      //     'bun',
+      //     'salad',
+      //     'chicken',
+      //   ]);
+      //   console.log(burger);
+      // }
+
+      // getBurgersOnebyOne().catch((e) => {
+      //   console.log('There has been a problem with your order: ' + e);
+      // });
+
+      async function makeBurger(ingredients) {
+        const burgerPromise = await new Promise((resolve, reject) => {
+          if (ingredients.includes('fish')) {
+            // If error use reject()
+            reject('We dont have any fish!!!');
+          }
+          const timeForBurger = 500 + ingredients.length * 300;
+          setTimeout(() => {
+            // When ready use resolve()
+            resolve(`Burger ready: ${ingredients.join(', ')}`);
+          }, timeForBurger);
+        });
+        return burgerPromise;
+      }
+
+      async function makeBurgerOneByOne() {
+        const burger1 = await makeBurger([
+          'bun',
+          'tomato',
+          'beef',
+          'sos',
+          'onion',
+        ]);
+        const burger2 = await makeBurger(['bun']);
+        const burger3 = await makeBurger([
+          'bun',
+          'salad',
+          'chicken',
+          'bun',
+          'salad',
+          'fish',
+        ]);
+      }
+
+      makeBurgerOneByOne().catch(handleError);
+
+      // makeBurger(['bun', 'tomato', 'beef', 'sos', 'onion'])
+      //   .then((burger) => {
+      //     console.log('Burger delivery');
+      //     console.log(burger);
+      //     return makeBurger(['bun']);
+      //   })
+      //   .then((burger) => {
+      //     console.log('Burger delivery');
+      //     console.log(burger);
+      //     return makeBurger([
+      //       'bun',
+      //       'salad',
+      //       'chicken',
+      //       'bun',
+      //       'salad',
+      //       'chicken',
+      //       'bun',
+      //       'salad',
+      //       'chicken',
+      //     ]);
+      //   })
+      //   .then((burger) => {
+      //     console.log('This is last burger');
+      //     console.log(burger);
+      //   })
+      //   .catch(handleError);
+
+      // // Concurently
+      // const beefBurgerPromise = makeBurger(['bun', 'tomato', 'beef']);
+      // const chickenBurgerPromise = makeBurger(['bun', 'salad', 'chicken']);
+      // const cheeseBurgerPromise = makeBurger(['cheese', 'fish']);
+
+      // const deliveryPromise = Promise.all([
+      //   beefBurgerPromise,
+      //   chickenBurgerPromise,
+      //   cheeseBurgerPromise,
+      // ]);
+
+      // deliveryPromise
+      //   .then(([hamBurger, chickenBurger, cheeseBurger]) => {
+      //     console.log(hamBurger);
+      //     console.log(chickenBurger);
+      //     console.log(cheeseBurger);
+      //   })
+      //   .catch(handleError);
+
+      // const firstBurgerPromise = Promise.race([
+      //   beefBurgerPromise,
+      //   chickenBurgerPromise,
+      //   cheeseBurgerPromise,
+      // ]);
+
+      // firstBurgerPromise
+      //   .then((burger) => {
+      //     console.log('I am first', burger);
+      //   })
+      //   .catch(handleError);
+
+      // const someBurgersPromise = Promise.allSettled([
+      //   beefBurgerPromise,
+      //   chickenBurgerPromise,
+      //   cheeseBurgerPromise,
+      // ]);
+
+      // someBurgersPromise
+      //   .then(([hamBurger, chickenBurger, cheeseBurger]) => {
+      //     console.log(hamBurger, chickenBurger, cheeseBurger);
+      //   })
+      //   .catch(handleError);
+
+      function handleError(error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
